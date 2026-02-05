@@ -1,8 +1,39 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2867
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reel 1 Playback</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; margin: 0; }
+    video { width: 100%; max-width: 600px; height: auto; }
+  </style>
+</head>
+<body>
 
-\f0\fs24 \cf0 Hello }
+  <video id="video" controls autoplay muted playsinline></video>
+
+  <script>
+    var video = document.getElementById('video');
+    
+    // REPLACE 'master.m3u8' WITH YOUR ACTUAL FILENAME FOUND IN FOLDER '1'
+    var videoSrc = './1/master.m3u8';
+
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.play();
+      });
+    }
+    // This part allows it to work natively on Safari (iPhone/Mac)
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('canplay', function() {
+        video.play();
+      });
+    }
+  </script>
+
+</body>
+</html>
